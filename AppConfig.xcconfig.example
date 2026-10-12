@@ -1,0 +1,27 @@
+// Example configuration file for MODEmployee
+// Copy this file to AppConfig.xcconfig and fill in your values
+// DO NOT commit AppConfig.xcconfig to version control
+
+// Development API Base URL
+API_BASE_URL_DEVELOPMENT = https://dev-api.example.com
+
+// Production API Base URL
+API_BASE_URL_PRODUCTION = https://api.example.com
+
+// KBY-AI License Key (obtain from KBY-AI)
+// Email: contact@kby-ai.com
+// Telegram: @kbyaisupport
+KBY_LICENSE_KEY = YOUR_LICENSE_KEY_HERE
+
+// Location accuracy threshold in meters
+LOCATION_ACCURACY_THRESHOLD = 50
+
+// Location timeout in seconds
+LOCATION_TIMEOUT = 10
+
+// API timeout in seconds
+API_TIMEOUT = 30
+
+// Feature flags
+USE_MOCK_SERVICES = YES
+ENABLE_DEBUG_LOGGING = YES

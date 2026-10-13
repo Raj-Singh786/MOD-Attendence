@@ -10,13 +10,11 @@ import Foundation
 // MARK: - Challenges
 
 enum LivenessChallenge: CaseIterable, Hashable {
-    case blink, smile, openMouth
+    case blink
 
     var prompt: String {
         switch self {
         case .blink:      return "Blink your eyes"
-        case .smile:      return "Smile"
-        case .openMouth:  return "Open your mouth"
         }
     }
 
@@ -38,16 +36,13 @@ struct FaceSignals {
 // MARK: - Policy (all thresholds in one place; CALIBRATE on real devices)
 
 struct LivenessPolicy {
-    var challengeCount = 3
-    var challengeTimeout: TimeInterval = 10    // Increased from 6 to 10 seconds per challenge
-    var overallTimeout: TimeInterval = 45       // Increased from 30 to 45 seconds total
-    var neutralHold: TimeInterval = 0.8        // Increased from 0.5 to 0.8 seconds
-    var minReactionTime: TimeInterval = 0.5    // Increased from 0.25 to 0.5 seconds
+    var challengeCount = 1
+    var challengeTimeout: TimeInterval = 10    // 10 seconds per challenge
+    var overallTimeout: TimeInterval = 30       // 30 seconds total
+    var neutralHold: TimeInterval = 0.8        // 0.8 seconds neutral hold
+    var minReactionTime: TimeInterval = 0.5    // 0.5 seconds reaction time
 
     var blinkThreshold: Float = 0.6
-    var smileThreshold: Float = 0.6
-    var mouthOpenThreshold: Float = 0.5
-    var turnDegrees: Float = 20
     var neutralMaxYaw: Float = 8
 
     /// Minimum "3D-ness" of the face (mm of deviation from a flat plane).
@@ -164,15 +159,11 @@ final class LivenessEngine {
     private func isNeutral(_ s: FaceSignals) -> Bool {
         s.eyesClosed < 0.3
             && abs(s.yawDegrees) < policy.neutralMaxYaw
-            && (s.smile ?? 0) < 0.3
-            && (s.mouthOpen ?? 0) < 0.3
     }
 
     private func isSatisfied(_ c: LivenessChallenge, _ s: FaceSignals) -> Bool {
         switch c {
         case .blink:      return s.eyesClosed >= policy.blinkThreshold
-        case .smile:      return (s.smile ?? 0) >= policy.smileThreshold
-        case .openMouth:  return (s.mouthOpen ?? 0) >= policy.mouthOpenThreshold
         }
     }
 

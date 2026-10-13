@@ -51,7 +51,7 @@ final class ARKitFaceSource: NSObject, FaceSignalSource, ARSessionDelegate {
     static let userLeftSign: Float = 1
 
     let method = "arkit+depth"
-    let supportedChallenges = Set(LivenessChallenge.allCases)
+    let supportedChallenges: Set<LivenessChallenge> = [.blink]
     let providesDepth = true
 
     var onSignals: ((FaceSignals) -> Void)?

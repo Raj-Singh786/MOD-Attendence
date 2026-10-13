@@ -250,6 +250,7 @@ class AttendanceViewController: UIViewController {
             // Retry Button
             retryButton.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 16),
             retryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            retryButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
             
             // Activity Indicator
             activityIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -373,7 +374,8 @@ class AttendanceViewController: UIViewController {
     
     @objc private func attendanceButtonTapped() {
         Task {
-            await viewModel.submitAttendance()
+            print("Attendence Butto Tapped")
+            await viewModel.submitAttendance(presenter: self)
         }
     }
     

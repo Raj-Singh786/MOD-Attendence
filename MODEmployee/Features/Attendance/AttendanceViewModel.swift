@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 @MainActor
 class AttendanceViewModel: ObservableObject {
@@ -95,9 +96,12 @@ class AttendanceViewModel: ObservableObject {
         await attendanceService.startAttendanceFlow()
     }
     
-    func submitAttendance() async {
-        // Configure liveness provider
-        let livenessProvider = KBYLivenessAdapter()
+    func submitAttendance(presenter: UIViewController) async {
+        // Configure liveness provider with Apple Liveness
+        let livenessProvider = AppleLivenessAdapter()
+        if let adapter = livenessProvider as? AppleLivenessAdapter {
+            adapter.setPresenter(presenter)
+        }
         attendanceService.setLivenessProvider(livenessProvider)
         
         await attendanceService.submitAttendance()

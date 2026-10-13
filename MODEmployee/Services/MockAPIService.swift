@@ -27,7 +27,7 @@ class MockAPIService {
             name: "Main Office",
             latitude: 28.674563232638263,
             longitude: 77.15138479517233,
-            allowedRadius: 100.0
+            allowedRadius: 2000.0
         )
     )
     

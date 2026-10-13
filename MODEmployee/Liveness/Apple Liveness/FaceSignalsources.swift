@@ -239,7 +239,7 @@ final class VisionFaceSource: NSObject, FaceSignalSource, AVCaptureVideoDataOutp
     static let userLeftSign: Float = 1
 
     let method = "vision"
-    let supportedChallenges: Set<LivenessChallenge> = [.blink, .turnLeft, .turnRight]
+    let supportedChallenges: Set<LivenessChallenge> = [.blink]
     let providesDepth = false
 
     var onSignals: ((FaceSignals) -> Void)?

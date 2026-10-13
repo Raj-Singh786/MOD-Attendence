@@ -99,11 +99,9 @@ class AttendanceViewModel: ObservableObject {
     func submitAttendance(presenter: UIViewController) async {
         // Configure liveness provider with Apple Liveness
         let livenessProvider = AppleLivenessAdapter()
-        if let adapter = livenessProvider as? AppleLivenessAdapter {
-            adapter.setPresenter(presenter)
-        }
+        livenessProvider.setPresenter(presenter)
         attendanceService.setLivenessProvider(livenessProvider)
-        
+
         await attendanceService.submitAttendance()
     }
     

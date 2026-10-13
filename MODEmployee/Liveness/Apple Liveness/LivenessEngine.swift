@@ -10,13 +10,11 @@ import Foundation
 // MARK: - Challenges
 
 enum LivenessChallenge: CaseIterable, Hashable {
-    case blink, turnLeft, turnRight, smile, openMouth
+    case blink, smile, openMouth
 
     var prompt: String {
         switch self {
         case .blink:      return "Blink your eyes"
-        case .turnLeft:   return "Turn your head to your left"
-        case .turnRight:  return "Turn your head to your right"
         case .smile:      return "Smile"
         case .openMouth:  return "Open your mouth"
         }
@@ -41,10 +39,10 @@ struct FaceSignals {
 
 struct LivenessPolicy {
     var challengeCount = 3
-    var challengeTimeout: TimeInterval = 6
-    var overallTimeout: TimeInterval = 30
-    var neutralHold: TimeInterval = 0.5      // face must be neutral this long before each challenge
-    var minReactionTime: TimeInterval = 0.25 // ignore "success" in the first moments after a prompt
+    var challengeTimeout: TimeInterval = 10    // Increased from 6 to 10 seconds per challenge
+    var overallTimeout: TimeInterval = 45       // Increased from 30 to 45 seconds total
+    var neutralHold: TimeInterval = 0.8        // Increased from 0.5 to 0.8 seconds
+    var minReactionTime: TimeInterval = 0.5    // Increased from 0.25 to 0.5 seconds
 
     var blinkThreshold: Float = 0.6
     var smileThreshold: Float = 0.6
@@ -173,8 +171,6 @@ final class LivenessEngine {
     private func isSatisfied(_ c: LivenessChallenge, _ s: FaceSignals) -> Bool {
         switch c {
         case .blink:      return s.eyesClosed >= policy.blinkThreshold
-        case .turnLeft:   return s.yawDegrees >= policy.turnDegrees
-        case .turnRight:  return s.yawDegrees <= -policy.turnDegrees
         case .smile:      return (s.smile ?? 0) >= policy.smileThreshold
         case .openMouth:  return (s.mouthOpen ?? 0) >= policy.mouthOpenThreshold
         }

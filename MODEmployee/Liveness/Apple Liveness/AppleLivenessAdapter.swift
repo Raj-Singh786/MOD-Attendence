@@ -19,10 +19,17 @@ class AppleLivenessAdapter: NSObject, LivenessProvider {
     private var presenter: UIViewController?
     
     // MARK: - Initialization
-    
+
     init(config: LivenessConfig = .default, policy: LivenessPolicy = LivenessPolicy()) {
         self.config = config
-        self.policy = policy
+        // Customize policy for better user experience
+        var customPolicy = policy
+        customPolicy.challengeCount = 2  // Reduce from 3 to 2 challenges
+        customPolicy.challengeTimeout = 10  // 10 seconds per challenge
+        customPolicy.overallTimeout = 45    // 45 seconds total
+        customPolicy.neutralHold = 0.8       // 0.8 seconds neutral hold
+        customPolicy.minReactionTime = 0.5   // 0.5 seconds reaction time
+        self.policy = customPolicy
         super.init()
     }
     

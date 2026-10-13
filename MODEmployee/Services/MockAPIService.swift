@@ -19,9 +19,9 @@ class MockAPIService {
     
     private let mockEmployee = Employee(
         id: "emp-001",
-        name: "John Doe",
+        name: "Raj Singh",
         employeeIdentifier: "EMP001",
-        email: "john.doe@example.com",
+        email: "raj.singh@example.com",
         site: AttendanceSite(
             id: "site-001",
             name: "Main Office",

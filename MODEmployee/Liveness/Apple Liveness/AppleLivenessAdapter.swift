@@ -71,15 +71,23 @@ class AppleLivenessAdapter: NSObject, LivenessProvider {
             capturedImage = placeholderImage
         }
         
-        // Calculate liveness score based on challenges passed
+        // Analyze frames for video spoofing
+        let videoAnalysis = FrameAnalyzer.analyzeFrames(appleResult.frames)
+        
+        // Calculate liveness score based on challenges passed and video analysis
         let totalChallenges = appleResult.challenges.count
         let challengesPassed = appleResult.challengesPassed
-        let livenessScore: Float
+        var livenessScore: Float
         
         if totalChallenges > 0 {
             livenessScore = Float(challengesPassed) / Float(totalChallenges)
         } else {
             livenessScore = appleResult.passed ? 1.0 : 0.0
+        }
+        
+        // Reduce score if video is detected
+        if videoAnalysis.isLikelyVideo {
+            livenessScore = livenessScore * (1.0 - videoAnalysis.confidence)
         }
         
         let diagnostics: [String: Any] = [
@@ -89,7 +97,12 @@ class AppleLivenessAdapter: NSObject, LivenessProvider {
             "challenges": appleResult.challenges,
             "challengesPassed": challengesPassed,
             "threshold": config.threshold,
-            "timestamp": Date().timeIntervalSince1970
+            "timestamp": Date().timeIntervalSince1970,
+            "videoDetection": [
+                "isLikelyVideo": videoAnalysis.isLikelyVideo,
+                "confidence": videoAnalysis.confidence,
+                "reasons": videoAnalysis.reasons
+            ]
         ]
         
         // Add depth relief if available
@@ -104,9 +117,15 @@ class AppleLivenessAdapter: NSObject, LivenessProvider {
             throw LivenessError.detectionFailed(failureReason)
         }
         
+        // Reject if video is detected with high confidence
+        if videoAnalysis.isLikelyVideo && videoAnalysis.confidence > 0.4 {
+            let reasons = videoAnalysis.reasons.joined(separator: ", ")
+            throw LivenessError.detectionFailed("Possible video spoofing detected: \(reasons)")
+        }
+        
         return LivenessResult(
             sessionID: sessionID,
-            isLive: appleResult.passed,
+            isLive: appleResult.passed && !videoAnalysis.isLikelyVideo,
             livenessScore: livenessScore,
             capturedImage: capturedImage,
             timestamp: Date(),

@@ -170,13 +170,13 @@ final class LivenessEngine {
     private func evaluateFinal() {
         if usesDepth && policy.requireDepthWhenAvailable {
             guard depthSamples.count >= policy.minDepthSamples else {
-                finish(false, "Depth data unavailable. Please try again.")
+                finish(false, "This doesn’t look like a live capture. Please try again.")
                 return
             }
             let median = depthSamples.sorted()[depthSamples.count / 2]
             medianDepthReliefMM = median
             if median < policy.minDepthReliefMM {
-                finish(false, "Face looks flat. Please use your live face.")
+                finish(false, "This doesn’t look like a live capture. Please use your live face.")
                 return
             }
         }

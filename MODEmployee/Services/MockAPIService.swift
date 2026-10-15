@@ -25,9 +25,9 @@ class MockAPIService {
         site: AttendanceSite(
             id: "site-001",
             name: "Main Office",
-            latitude: 28.674563232638263,
-            longitude: 77.15138479517233,
-            allowedRadius: 2000.0
+            latitude: 28.664055261689093,
+            longitude: 77.15003963379344,
+            allowedRadius: 700.0
         )
     )
     
